@@ -16,7 +16,7 @@ class StateStatusPicker extends StatefulWidget {
     required this.width,
     required this.options,
     required this.onChanged,
-    this.placeholderBox = "Seleccione",
+    this.placeholderBox = "Select",
     this.placeholderOverlay = "Search status...",
   });
 
@@ -89,34 +89,24 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.grey[400]!),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  selectedOptions.isEmpty ? Text(widget.placeholderBox, style: TextStyle(
-                    color: Colors.grey[500]!
-                  ),) :
-                  Container(
-                    width: 8 * selectedOptions.length + 2,
-                    margin: const EdgeInsets.only(
-                      right: 8
-                    ),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: selectedOptions.asMap().entries.map((e) {
-                        return (e.key == 0) ? 
-                          Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: e.value.color,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.white
-                              )
-                            ),
-                          ) : Positioned(
-                            left: e.key * 8,
-                            child: Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    selectedOptions.isEmpty ? Text(widget.placeholderBox, style: TextStyle(
+                      color: Colors.grey[500]!
+                    )) :
+                    Container(
+                      width: 8 * selectedOptions.length + 2,
+                      margin: const EdgeInsets.only(
+                        right: 8
+                      ),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: selectedOptions.asMap().entries.map((e) {
+                          return (e.key == 0) ? 
+                            Container(
                               width: 10,
                               height: 10,
                               decoration: BoxDecoration(
@@ -126,16 +116,29 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
                                   color: Colors.white
                                 )
                               ),
-                            ),
-                          );
-                        }
-                      ).toList()
+                            ) : Positioned(
+                              left: e.key * 8,
+                              child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: e.value.color,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white
+                                  )
+                                ),
+                              ),
+                            );
+                          }
+                        ).toList()
+                      ),
                     ),
-                  ),
-                  Text(selectedOptions.map((e) => e.label).join(", "), style: const TextStyle(
-                    fontWeight: FontWeight.w500
-                  )),
-                ],
+                    Text(selectedOptions.map((e) => e.label).join(", "), style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    )),
+                  ],
+                ),
               ),
             ),
           ),

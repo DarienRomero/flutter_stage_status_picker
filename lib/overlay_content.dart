@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:diacritic/diacritic.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stage_status_picker/status_picker_option.dart';
 
@@ -37,7 +41,7 @@ class _OverlayContentState extends State<OverlayContent> {
   } 
   @override
   Widget build(BuildContext context) {
-    final filteredOptions = innerOptions.where((option) => option.label.toLowerCase().contains(widget.controller.text.toLowerCase()));
+    final filteredOptions = innerOptions.where((option) => removeDiacritics(option.label).toLowerCase().startsWith(removeDiacritics(widget.controller.text).toLowerCase()));
     return Stack(
       children: [
         // Detección de clic fuera del dropdown
@@ -77,6 +81,9 @@ class _OverlayContentState extends State<OverlayContent> {
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                           ),
+                          onChanged: (value) {
+                            setState(() {});
+                          },
                           // onChanged: widget.onChanged
                         ),
                       ),
@@ -99,57 +106,54 @@ class _OverlayContentState extends State<OverlayContent> {
                   ),
                   const Divider(),
                   // Lista de opciones
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 200),
-                    child: SingleChildScrollView(
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        itemCount: filteredOptions.length,
-                        itemBuilder: (context, index) {
-                          final option = filteredOptions.elementAt(index);
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 12,
-                                      height: 12,
-                                      decoration: BoxDecoration(
-                                        color: option.color,
-                                        shape: BoxShape.circle
-                                      ),
-                                      margin: const EdgeInsets.only(
-                                        right: 8
-                                      ),
+                  SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: filteredOptions.length,
+                      itemBuilder: (context, index) {
+                        final option = filteredOptions.elementAt(index);
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                      color: option.color,
+                                      shape: BoxShape.circle
                                     ),
-                                    Text(option.label, style: const TextStyle(
-                                      fontWeight: FontWeight.w500
-                                    )),
-                                  ],
-                                ),
-                                Switch(
-                                  value: option.selected, 
-                                  onChanged: (newValue){
-                                    setState(() {
-                                      innerOptions = innerOptions.map((e) => e.id == option.id ? option.copyWith(
-                                        selected: newValue
-                                      ) : e).toList();
-                                    });
-                                    widget.onChanged(innerOptions);
-                                  }
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      )
+                                    margin: const EdgeInsets.only(
+                                      right: 8
+                                    ),
+                                  ),
+                                  Text(option.label, style: const TextStyle(
+                                    fontWeight: FontWeight.w500
+                                  )),
+                                ],
+                              ),
+                              Platform.isIOS ? CupertinoSwitch(
+                                value: option.selected, 
+                                onChanged: (newValue){
+                                  switchOnChanged(newValue, option);
+                                }
+                              ) : Switch(
+                                value: option.selected, 
+                                onChanged: (newValue){
+                                  switchOnChanged(newValue, option);
+                                }
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     ),
                   ),
                 ],
@@ -159,5 +163,13 @@ class _OverlayContentState extends State<OverlayContent> {
         ),
       ],
     );
+  }
+  void switchOnChanged(bool newValue, StatusPickerOption option){
+    setState(() {
+      innerOptions = innerOptions.map((e) => e.id == option.id ? option.copyWith(
+        selected: newValue
+      ) : e).toList();
+    });
+    widget.onChanged(innerOptions);
   }
 }

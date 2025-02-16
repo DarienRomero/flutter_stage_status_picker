@@ -33,6 +33,7 @@ dependencies:
 
   flutter_stage_status_picker:
     path: ../
+  diacritic: ^0.1.6
 
 dev_dependencies:
   flutter_test:
