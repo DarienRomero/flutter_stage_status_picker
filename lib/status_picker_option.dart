@@ -12,4 +12,18 @@ class StatusPickerOption {
     required this.color,
     required this.selected,
   });
+
+  StatusPickerOption copyWith({
+    String? id,
+    String? label,
+    Color? color,
+    bool? selected,
+  }) {
+    return StatusPickerOption(
+      id: id ?? this.id,
+      label: label ?? this.label,
+      color: color ?? this.color,
+      selected: selected ?? this.selected,
+    );
+  }
 }

@@ -21,13 +21,6 @@ class StateStatusPicker extends StatefulWidget {
 }
 
 class _StateStatusPickerState extends State<StateStatusPicker> {
-  late List<StatusPickerOption> innerOptions;
-
-  @override
-  void initState() {
-    innerOptions = widget.options;
-    super.initState();
-  } 
 
   final GlobalKey _buttonKey = GlobalKey();
   OverlayEntry? _overlayEntry;
@@ -54,10 +47,8 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
         onClose: _closeDropdown, 
         controller: _searchController, 
         onSelectAll: (){}, 
-        onOptionSelected: (option){
-
-        }, 
-        options: innerOptions
+        onChanged: widget.onChanged,
+        options: widget.options
       )
     );
 
@@ -77,6 +68,7 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedOptions = widget.options.where((option) => option.selected).toList();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -95,14 +87,17 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  selectedOptions.isEmpty ? Text("Seleccione", style: TextStyle(
+                    color: Colors.grey[500]!
+                  ),) :
                   Container(
-                    width: 8 * innerOptions.length + 2,
+                    width: 8 * selectedOptions.length + 2,
                     margin: const EdgeInsets.only(
                       right: 8
                     ),
                     child: Stack(
                       clipBehavior: Clip.none,
-                      children: innerOptions.asMap().entries.map((e) {
+                      children: selectedOptions.asMap().entries.map((e) {
                         return (e.key == 0) ? 
                           Container(
                             width: 10,
@@ -132,7 +127,7 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
                       ).toList()
                     ),
                   ),
-                  Text(innerOptions.map((e) => e.label).join(", "), style: const TextStyle(
+                  Text(selectedOptions.map((e) => e.label).join(", "), style: const TextStyle(
                     fontWeight: FontWeight.w500
                   )),
                 ],
@@ -144,78 +139,3 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
     );
   }
 }
-/* _overlayEntry = OverlayEntry(
-      builder: (context) => Stack(
-        children: [
-          // Detección de clic fuera del dropdown
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: _closeDropdown,
-              child: Container(color: Colors.transparent),
-            ),
-          ),
-          Positioned(
-            left: offset.dx,
-            top: offset.dy + size.height + 5,
-            width: size.width,
-            child: Material(
-              elevation: 5,
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Caja de texto para filtrar opciones
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            hintText: "Search...",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                          ),
-                          onChanged: (value) => setState(() {}), // Refresca la lista al escribir
-                        ),
-                      ),
-                      // Botón adicional dentro del Dropdown
-                      TextButton(
-                        onPressed: () {
-                          print("Extra Button Clicked");
-                        },
-                        child: const Text("Extra Button"),
-                      ),
-                    ],
-                  ),
-                  // Lista de opciones
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 200),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: _options
-                            .where((option) => option
-                                .toLowerCase()
-                                .contains(_searchController.text.toLowerCase()))
-                            .map((option) => ListTile(
-                                  title: Text(option),
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedOption = option;
-                                    });
-                                    _closeDropdown();
-                                  },
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    ); */

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stage_status_picker/status_picker_option.dart';
 
-class OverlayContent extends StatelessWidget {
+class OverlayContent extends StatefulWidget {
   final Offset offset;
   final Size size;
   final Function() onClose;
   final TextEditingController controller;
-  final Function(String)? onChanged;
   final Function() onSelectAll;
-  final Function(StatusPickerOption) onOptionSelected;
+  final Function(List<StatusPickerOption>) onChanged;
   final List<StatusPickerOption> options;
 
   const OverlayContent({
@@ -17,28 +16,39 @@ class OverlayContent extends StatelessWidget {
     required this.size,
     required this.onClose,
     required this.controller,
-    this.onChanged,
     required this.onSelectAll,
-    required this.onOptionSelected,
+    required this.onChanged,
     required this.options,
   });
 
   @override
+  State<OverlayContent> createState() => _OverlayContentState();
+}
+
+class _OverlayContentState extends State<OverlayContent> {
+  late List<StatusPickerOption> innerOptions;
+
+  @override
+  void initState() {
+    innerOptions = widget.options;
+    super.initState();
+  } 
+  @override
   Widget build(BuildContext context) {
-    final filteredOptions = options.where((option) => option.label.toLowerCase().contains(controller.text.toLowerCase()));
+    final filteredOptions = innerOptions.where((option) => option.label.toLowerCase().contains(widget.controller.text.toLowerCase()));
     return Stack(
       children: [
         // Detección de clic fuera del dropdown
         Positioned.fill(
           child: GestureDetector(
-            onTap: onClose,
+            onTap: widget.onClose,
             child: Container(color: Colors.transparent),
           ),
         ),
         Positioned(
-          left: offset.dx,
-          top: offset.dy + size.height + 5,
-          width: size.width,
+          left: widget.offset.dx,
+          top: widget.offset.dy + widget.size.height + 5,
+          width: widget.size.width,
           child: Material(
             elevation: 5,
             borderRadius: BorderRadius.circular(10),
@@ -53,7 +63,7 @@ class OverlayContent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: controller,
+                          controller: widget.controller,
                           decoration: InputDecoration(
                             // prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
                             hintText: "Search status...",
@@ -65,13 +75,18 @@ class OverlayContent extends StatelessWidget {
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                           ),
-                          onChanged: onChanged
+                          // onChanged: widget.onChanged
                         ),
                       ),
                       // Botón adicional dentro del Dropdown
                       TextButton(
                         onPressed: () {
-                          print("Extra Button Clicked");
+                          setState(() {
+                            innerOptions = innerOptions.map((e) => e.copyWith(
+                              selected: true
+                            )).toList();
+                          });
+                          widget.onChanged(innerOptions);
                         },
                         child: Text("Select all", style: TextStyle(
                           color: Colors.grey[500],
@@ -120,7 +135,12 @@ class OverlayContent extends StatelessWidget {
                                 Switch(
                                   value: option.selected, 
                                   onChanged: (newValue){
-                            
+                                    setState(() {
+                                      innerOptions = innerOptions.map((e) => e.id == option.id ? option.copyWith(
+                                        selected: newValue
+                                      ) : e).toList();
+                                    });
+                                    widget.onChanged(innerOptions);
                                   }
                                 ),
                               ],

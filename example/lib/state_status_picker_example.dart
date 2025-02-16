@@ -10,12 +10,12 @@ class StateStatusPickerExample extends StatefulWidget {
 }
 
 class _StateStatusPickerExampleState extends State<StateStatusPickerExample> {
-  final list = [
+  List<StatusPickerOption> list = [
     StatusPickerOption(
       id: "1",
       label: "Option 1", 
       color: Colors.red,
-      selected: false
+      selected: true
     ),
     StatusPickerOption(
       id: "2",
@@ -36,7 +36,9 @@ class _StateStatusPickerExampleState extends State<StateStatusPickerExample> {
       options: list,
       width: 400,
       onChanged: (List<StatusPickerOption> options) {
-        
+        setState(() {
+          list = options;
+        });
       },
     );
   }
