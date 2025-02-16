@@ -9,6 +9,7 @@ class OverlayContent extends StatefulWidget {
   final Function() onSelectAll;
   final Function(List<StatusPickerOption>) onChanged;
   final List<StatusPickerOption> options;
+  final String? placeholder;
 
   const OverlayContent({
     super.key,
@@ -19,6 +20,7 @@ class OverlayContent extends StatefulWidget {
     required this.onSelectAll,
     required this.onChanged,
     required this.options,
+    this.placeholder
   });
 
   @override
@@ -66,7 +68,7 @@ class _OverlayContentState extends State<OverlayContent> {
                           controller: widget.controller,
                           decoration: InputDecoration(
                             // prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
-                            hintText: "Search status...",
+                            hintText: widget.placeholder,
                             hintStyle: TextStyle(
                               color: Colors.grey[400],
                               fontWeight: FontWeight.w400,

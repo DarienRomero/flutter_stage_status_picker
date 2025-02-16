@@ -7,13 +7,17 @@ import 'package:flutter_stage_status_picker/status_picker_option.dart';
 class StateStatusPicker extends StatefulWidget {
   final double width;
   final List<StatusPickerOption> options;
-  final Function(List<StatusPickerOption>) onChanged; 
+  final Function(List<StatusPickerOption>) onChanged;
+  final String placeholderBox;
+  final String placeholderOverlay;
 
   const StateStatusPicker({
     super.key,
     required this.width,
     required this.options,
     required this.onChanged,
+    this.placeholderBox = "Seleccione",
+    this.placeholderOverlay = "Search status...",
   });
 
   @override
@@ -48,7 +52,8 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
         controller: _searchController, 
         onSelectAll: (){}, 
         onChanged: widget.onChanged,
-        options: widget.options
+        options: widget.options,
+        placeholder: widget.placeholderOverlay,
       )
     );
 
@@ -87,7 +92,7 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  selectedOptions.isEmpty ? Text("Seleccione", style: TextStyle(
+                  selectedOptions.isEmpty ? Text(widget.placeholderBox, style: TextStyle(
                     color: Colors.grey[500]!
                   ),) :
                   Container(
