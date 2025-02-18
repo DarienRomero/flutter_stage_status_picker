@@ -36,7 +36,8 @@ class StateStatusPicker extends StatefulWidget {
     this.overlayHeight = 200,
     this.overlaySelectAllText = "Select all",
     this.overlaySelectAllTextColor = const Color(0xFF9E9E9E),
-  });
+  }) : 
+    assert(width >= 300, 'At least 300px width');
 
   @override
   State<StateStatusPicker> createState() => _StateStatusPickerState();

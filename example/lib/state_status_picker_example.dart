@@ -13,7 +13,7 @@ class _StateStatusPickerExampleState extends State<StateStatusPickerExample> {
   List<StatusPickerOption> list = [
     StatusPickerOption(
       id: "1",
-      label: "Perro", 
+      label: "Perro de mi vecino que me mordio", 
       color: Colors.red,
       selected: true
     ),
@@ -65,7 +65,7 @@ class _StateStatusPickerExampleState extends State<StateStatusPickerExample> {
   Widget build(BuildContext context) {
     return StateStatusPicker(
       options: list,
-      width: 400,
+      width: 300,
       overlayHeight: 150,
       onChanged: (List<StatusPickerOption> options) {
         setState(() {

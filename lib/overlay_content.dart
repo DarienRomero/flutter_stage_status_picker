@@ -1,8 +1,6 @@
-import 'dart:io';
-
 import 'package:diacritic/diacritic.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stage_status_picker/custom_switch.dart';
 import 'package:flutter_stage_status_picker/status_picker_option.dart';
 
 class OverlayContent extends StatefulWidget {
@@ -141,23 +139,24 @@ class _OverlayContentState extends State<OverlayContent> {
                                       right: 8
                                     ),
                                   ),
-                                  Text(option.label, style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: widget.optionTextColor
-                                  )),
+                                  SizedBox(
+                                    width: widget.size.width - 120,
+                                    child: Text(option.label, style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: widget.optionTextColor
+                                    ), 
+                                    maxLines: 1, 
+                                    overflow: TextOverflow.ellipsis
+                                  ),
+                                  ),
                                 ],
                               ),
-                              Platform.isIOS ? CupertinoSwitch(
-                                value: option.selected, 
+                              CustomSwitch(
+                                value: option.selected,
                                 onChanged: (newValue){
                                   switchOnChanged(newValue, option);
                                 }
-                              ) : Switch(
-                                value: option.selected, 
-                                onChanged: (newValue){
-                                  switchOnChanged(newValue, option);
-                                }
-                              ),
+                              )
                             ],
                           ),
                         );
