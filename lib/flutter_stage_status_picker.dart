@@ -8,16 +8,34 @@ class StateStatusPicker extends StatefulWidget {
   final double width;
   final List<StatusPickerOption> options;
   final Function(List<StatusPickerOption>) onChanged;
-  final String placeholderBox;
-  final String placeholderOverlay;
+  final String boxPlaceholder;
+  final String overlayPlaceholder;
+  final Color boxPlaceholderTextColor;
+  final Color? boxTextColor;
+  final double boxBorderRadius;
+  final Color boxBorderColor;
+  final Color overlayHintTextColor;
+  final Color? overlayOptionTextColor;
+  final double overlayHeight;
+  final String overlaySelectAllText;
+  final Color overlaySelectAllTextColor;
 
   const StateStatusPicker({
     super.key,
     required this.width,
     required this.options,
     required this.onChanged,
-    this.placeholderBox = "Select",
-    this.placeholderOverlay = "Search status...",
+    this.boxPlaceholder = "Select",
+    this.overlayPlaceholder = "Search status...",
+    this.boxPlaceholderTextColor = Colors.grey,
+    this.boxTextColor,
+    this.boxBorderRadius = 10,
+    this.boxBorderColor = const Color(0xFFBDBDBD),
+    this.overlayHintTextColor = const Color(0xFFBDBDBD),
+    this.overlayOptionTextColor,
+    this.overlayHeight = 200,
+    this.overlaySelectAllText = "Select all",
+    this.overlaySelectAllTextColor = const Color(0xFF9E9E9E),
   });
 
   @override
@@ -53,7 +71,12 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
         onSelectAll: (){}, 
         onChanged: widget.onChanged,
         options: widget.options,
-        placeholder: widget.placeholderOverlay,
+        placeholder: widget.overlayPlaceholder,
+        hintTextColor: widget.overlayHintTextColor,
+        optionTextColor: widget.overlayOptionTextColor,
+        overlayHeight: widget.overlayHeight,
+        selectAllText: widget.overlaySelectAllText,
+        selectAllTextColor: widget.overlaySelectAllTextColor,
       )
     );
 
@@ -86,16 +109,16 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey[400]!),
+                borderRadius: BorderRadius.circular(widget.boxBorderRadius),
+                border: Border.all(color: widget.boxBorderColor),
               ),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    selectedOptions.isEmpty ? Text(widget.placeholderBox, style: TextStyle(
-                      color: Colors.grey[500]!
+                    selectedOptions.isEmpty ? Text(widget.boxPlaceholder, style: TextStyle(
+                      color: widget.boxPlaceholderTextColor
                     )) :
                     Container(
                       width: 8 * selectedOptions.length + 2,
@@ -134,8 +157,9 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
                         ).toList()
                       ),
                     ),
-                    Text(selectedOptions.map((e) => e.label).join(", "), style: const TextStyle(
-                      fontWeight: FontWeight.w500
+                    Text(selectedOptions.map((e) => e.label).join(", "), style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: widget.boxTextColor
                     )),
                   ],
                 ),

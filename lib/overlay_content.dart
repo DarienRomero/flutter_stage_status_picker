@@ -14,6 +14,11 @@ class OverlayContent extends StatefulWidget {
   final Function(List<StatusPickerOption>) onChanged;
   final List<StatusPickerOption> options;
   final String? placeholder;
+  final Color hintTextColor;
+  final Color selectAllTextColor;
+  final Color? optionTextColor;
+  final double overlayHeight;
+  final String selectAllText;
 
   const OverlayContent({
     super.key,
@@ -24,7 +29,12 @@ class OverlayContent extends StatefulWidget {
     required this.onSelectAll,
     required this.onChanged,
     required this.options,
-    this.placeholder
+    this.placeholder,
+    required this.hintTextColor,
+    required this.selectAllTextColor,
+    required this.optionTextColor,
+    required this.overlayHeight,
+    required this.selectAllText
   });
 
   @override
@@ -71,10 +81,9 @@ class _OverlayContentState extends State<OverlayContent> {
                         child: TextField(
                           controller: widget.controller,
                           decoration: InputDecoration(
-                            // prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
                             hintText: widget.placeholder,
                             hintStyle: TextStyle(
-                              color: Colors.grey[400],
+                              color: widget.hintTextColor,
                               fontWeight: FontWeight.w400,
                               fontSize: 14
                             ),
@@ -84,10 +93,8 @@ class _OverlayContentState extends State<OverlayContent> {
                           onChanged: (value) {
                             setState(() {});
                           },
-                          // onChanged: widget.onChanged
                         ),
                       ),
-                      // Botón adicional dentro del Dropdown
                       TextButton(
                         onPressed: () {
                           setState(() {
@@ -97,8 +104,8 @@ class _OverlayContentState extends State<OverlayContent> {
                           });
                           widget.onChanged(innerOptions);
                         },
-                        child: Text("Select all", style: TextStyle(
-                          color: Colors.grey[500],
+                        child: Text(widget.selectAllText, style: TextStyle(
+                          color: widget.selectAllTextColor,
                           fontSize: 14
                         )),
                       ),
@@ -107,7 +114,7 @@ class _OverlayContentState extends State<OverlayContent> {
                   const Divider(),
                   // Lista de opciones
                   SizedBox(
-                    height: 200,
+                    height: widget.overlayHeight,
                     child: ListView.builder(
                       padding: EdgeInsets.zero,
                       itemCount: filteredOptions.length,
@@ -134,8 +141,9 @@ class _OverlayContentState extends State<OverlayContent> {
                                       right: 8
                                     ),
                                   ),
-                                  Text(option.label, style: const TextStyle(
-                                    fontWeight: FontWeight.w500
+                                  Text(option.label, style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: widget.optionTextColor
                                   )),
                                 ],
                               ),

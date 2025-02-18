@@ -65,7 +65,8 @@ class _StateStatusPickerExampleState extends State<StateStatusPickerExample> {
   Widget build(BuildContext context) {
     return StateStatusPicker(
       options: list,
-      width: 300,
+      width: 400,
+      overlayHeight: 150,
       onChanged: (List<StatusPickerOption> options) {
         setState(() {
           list = options;
