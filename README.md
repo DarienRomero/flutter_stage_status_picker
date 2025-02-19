@@ -1,22 +1,22 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# flutter_stage_status_picker
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This package provides a customizable widget for selecting statuses in a Flutter user interface.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Status picker with customizable options.
+- Support for searching statuses in an overlay.
+- Ability to select multiple statuses.
+- Customizable colors and placeholder texts.
+
+## Installation
+
+Add this line to your `pubspec.yaml` file in the `dependencies` section:
+
+```yaml
+dependencies:
+  flutter_stage_status_picker: ^1.0.0
+```
 
 ## Getting started
 

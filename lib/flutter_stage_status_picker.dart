@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stage_status_picker/overlay_content.dart';
 import 'package:flutter_stage_status_picker/status_picker_option.dart';
 
+/// A widget for selecting statuses with customizable options.
 class StateStatusPicker extends StatefulWidget {
   final double width;
   final List<StatusPickerOption> options;
@@ -20,6 +21,9 @@ class StateStatusPicker extends StatefulWidget {
   final String overlaySelectAllText;
   final Color overlaySelectAllTextColor;
 
+  /// Creates a new [StateStatusPicker].
+  ///
+  /// The [width], [options], and [onChanged] parameters are required.
   const StateStatusPicker({
     super.key,
     required this.width,
@@ -50,6 +54,7 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
   bool _isDropdownOpen = false;
   final TextEditingController _searchController = TextEditingController();
 
+  /// Toggles the dropdown menu.
   void _toggleDropdown() {
     if (_isDropdownOpen) {
       _closeDropdown();
@@ -58,6 +63,7 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
     }
   }
 
+  /// Opens the dropdown menu.
   void _openDropdown() {
     RenderBox renderBox = buttonKey.currentContext!.findRenderObject() as RenderBox;
     Offset offset = renderBox.localToGlobal(Offset.zero);
@@ -86,6 +92,7 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
     });
   }
 
+  /// Closes the dropdown menu.
   void _closeDropdown() {
     _overlayEntry?.remove();
     _overlayEntry = null;

@@ -13,50 +13,38 @@ class _StateStatusPickerExampleState extends State<StateStatusPickerExample> {
   List<StatusPickerOption> list = [
     StatusPickerOption(
       id: "1",
-      label: "Perro de mi vecino que me mordio", 
+      label: "Math", 
       color: Colors.red,
       selected: true
     ),
     StatusPickerOption(
       id: "2",
-      label: "Gato", 
+      label: "Chemistry", 
       color: Colors.blue,
       selected: false
     ),
     StatusPickerOption(
       id: "3",
-      label: "Conejo", 
+      label: "Physics", 
       color: Colors.yellow,
       selected: false
     ),
     StatusPickerOption(
       id: "4",
-      label: "Tortuga", 
+      label: "Aritmetics", 
       color: Colors.green,
       selected: false
     ),
     StatusPickerOption(
       id: "5",
-      label: "Pez", 
-      color: Colors.orange,
-      selected: false
-    ),
-    StatusPickerOption(
-      id: "6",
-      label: "Hámster", 
+      label: "Biology", 
       color: Colors.purple,
       selected: false
     ),
     StatusPickerOption(
-      id: "7",
-      label: "Loro", 
-      color: Colors.pink,
-      selected: false
-    ),
-    StatusPickerOption(
-      id: "8",
-      label: "Erizo", 
-      color: Colors.brown,
+      id: "6",
+      label: "History", 
+      color: Colors.orange,
       selected: false
     ),
   ]; 

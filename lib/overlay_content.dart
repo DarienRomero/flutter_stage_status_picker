@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stage_status_picker/custom_switch.dart';
 import 'package:flutter_stage_status_picker/status_picker_option.dart';
 
+/// A widget that displays the overlay content for the status picker.
 class OverlayContent extends StatefulWidget {
   final Offset offset;
   final Size size;
@@ -17,6 +18,11 @@ class OverlayContent extends StatefulWidget {
   final double overlayHeight;
   final String selectAllText;
 
+  /// Creates a new [OverlayContent].
+  ///
+  /// The [offset], [size], [onClose], [controller], [onChanged], [options],
+  /// [hintTextColor], [selectAllTextColor], [overlayHeight], and [selectAllText]
+  /// parameters are required.
   const OverlayContent({
     super.key,
     required this.offset,
@@ -38,143 +44,104 @@ class OverlayContent extends StatefulWidget {
 }
 
 class _OverlayContentState extends State<OverlayContent> {
-  late List<StatusPickerOption> innerOptions;
+  late List<StatusPickerOption> filteredOptions;
 
   @override
   void initState() {
-    innerOptions = widget.options;
     super.initState();
-  } 
+    filteredOptions = widget.options;
+    widget.controller.addListener(_filterOptions);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_filterOptions);
+    super.dispose();
+  }
+
+  void _filterOptions() {
+    setState(() {
+      filteredOptions = widget.options.where((option) {
+        final query = removeDiacritics(widget.controller.text.toLowerCase());
+        final label = removeDiacritics(option.label.toLowerCase());
+        return label.contains(query);
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final filteredOptions = innerOptions.where((option) => removeDiacritics(option.label).toLowerCase().startsWith(removeDiacritics(widget.controller.text).toLowerCase()));
-    return Stack(
-      children: [
-        // Detección de clic fuera del dropdown
-        Positioned.fill(
-          child: GestureDetector(
-            onTap: widget.onClose,
-            child: Container(color: Colors.transparent),
-          ),
-        ),
-        Positioned(
-          left: widget.offset.dx,
-          top: widget.offset.dy + widget.size.height + 5,
+    return Positioned(
+      left: widget.offset.dx,
+      top: widget.offset.dy + widget.size.height,
+      child: Material(
+        elevation: 4.0,
+        child: SizedBox(
           width: widget.size.width,
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Caja de texto para filtrar opciones
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: widget.controller,
-                          decoration: InputDecoration(
-                            hintText: widget.placeholder,
-                            hintStyle: TextStyle(
-                              color: widget.hintTextColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+          height: widget.overlayHeight,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: widget.controller,
+                  decoration: InputDecoration(
+                    hintText: widget.placeholder,
+                    hintStyle: TextStyle(color: widget.hintTextColor),
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        widget.selectAllText,
+                        style: TextStyle(color: widget.selectAllTextColor),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          final allSelected = filteredOptions.every((option) => option.selected);
+                          for (var option in filteredOptions) {
+                            option = option.copyWith(selected: !allSelected);
+                          }
+                        });
+                        widget.onChanged(filteredOptions);
+                      },
+                    ),
+                    ...filteredOptions.map((option) {
+                      return ListTile(
+                        leading: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: option.color,
+                            shape: BoxShape.circle,
                           ),
+                        ),
+                        title: Text(
+                          option.label,
+                          style: TextStyle(color: widget.optionTextColor),
+                        ),
+                        trailing: CustomSwitch(
+                          value: option.selected,
                           onChanged: (value) {
-                            setState(() {});
+                            setState(() {
+                              option = option.copyWith(selected: value);
+                            });
+                            widget.onChanged(filteredOptions);
                           },
                         ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            innerOptions = innerOptions.map((e) => e.copyWith(
-                              selected: true
-                            )).toList();
-                          });
-                          widget.onChanged(innerOptions);
-                        },
-                        child: Text(widget.selectAllText, style: TextStyle(
-                          color: widget.selectAllTextColor,
-                          fontSize: 14
-                        )),
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-                  // Lista de opciones
-                  SizedBox(
-                    height: widget.overlayHeight,
-                    child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: filteredOptions.length,
-                      itemBuilder: (context, index) {
-                        final option = filteredOptions.elementAt(index);
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 12,
-                                    height: 12,
-                                    decoration: BoxDecoration(
-                                      color: option.color,
-                                      shape: BoxShape.circle
-                                    ),
-                                    margin: const EdgeInsets.only(
-                                      right: 8
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: widget.size.width - 120,
-                                    child: Text(option.label, style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: widget.optionTextColor
-                                    ), 
-                                    maxLines: 1, 
-                                    overflow: TextOverflow.ellipsis
-                                  ),
-                                  ),
-                                ],
-                              ),
-                              CustomSwitch(
-                                value: option.selected,
-                                onChanged: (newValue){
-                                  switchOnChanged(newValue, option);
-                                }
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                    ),
-                  ),
-                ],
+                      );
+                    }),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
-  }
-  void switchOnChanged(bool newValue, StatusPickerOption option){
-    setState(() {
-      innerOptions = innerOptions.map((e) => e.id == option.id ? option.copyWith(
-        selected: newValue
-      ) : e).toList();
-    });
-    widget.onChanged(innerOptions);
   }
 }
