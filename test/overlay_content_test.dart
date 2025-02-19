@@ -25,7 +25,6 @@ void main() {
             size: const Size(200, 300),
             onClose: () {},
             controller: controller,
-            onSelectAll: () {},
             onChanged: (List<StatusPickerOption> newOptions) {},
             options: options,
             placeholder: 'Search...',
@@ -51,7 +50,6 @@ void main() {
             size: const Size(200, 300),
             onClose: () {},
             controller: controller,
-            onSelectAll: () {},
             onChanged: (List<StatusPickerOption> newOptions) {
               options = newOptions;
             },
@@ -69,7 +67,6 @@ void main() {
       expect(find.text('Option 1'), findsOneWidget);
       expect(find.text('Option 2'), findsOneWidget);
       
-      // options = [StatusPickerOption(id: '1', label: 'Option 1', selected: false, color: Colors.red)];
       await tester.enterText(find.byType(TextField), 'Option 1');
       await tester.pump();
       
@@ -77,9 +74,8 @@ void main() {
       expect(find.text('Option 2'), findsNothing);
     });
 
-    /* testWidgets('selects all options when Select All is pressed', (WidgetTester tester) async {
+    testWidgets('selects all options when Select All is pressed', (WidgetTester tester) async {
       bool selectAllPressed = false;
-      List<StatusPickerOption> updatedOptions = [];
       
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -88,11 +84,8 @@ void main() {
             size: const Size(200, 300),
             onClose: () {},
             controller: controller,
-            onSelectAll: () {
-              selectAllPressed = true;
-            },
             onChanged: (List<StatusPickerOption> newOptions) {
-              updatedOptions = newOptions;
+              selectAllPressed = true;
             },
             options: options,
             placeholder: 'Search...',
@@ -104,11 +97,15 @@ void main() {
           ),
         ),
       ));
+      final textFinder = find.text('Select All');
 
-      await tester.tap(find.text('Select All'));
+      final buttonFinder = find.ancestor(
+        of: textFinder,
+        matching: find.byType(TextButton),
+      );
+      await tester.tap(buttonFinder);
       await tester.pump();
       expect(selectAllPressed, isTrue);
-      expect(updatedOptions.where((option) => option.selected).length, 2);
-    }); */
+    });
   });
 }

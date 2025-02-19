@@ -8,7 +8,6 @@ class OverlayContent extends StatefulWidget {
   final Size size;
   final Function() onClose;
   final TextEditingController controller;
-  final Function() onSelectAll;
   final Function(List<StatusPickerOption>) onChanged;
   final List<StatusPickerOption> options;
   final String? placeholder;
@@ -24,7 +23,6 @@ class OverlayContent extends StatefulWidget {
     required this.size,
     required this.onClose,
     required this.controller,
-    required this.onSelectAll,
     required this.onChanged,
     required this.options,
     this.placeholder,

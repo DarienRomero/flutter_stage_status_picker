@@ -45,7 +45,7 @@ class StateStatusPicker extends StatefulWidget {
 
 class _StateStatusPickerState extends State<StateStatusPicker> {
 
-  final GlobalKey _buttonKey = GlobalKey();
+  final GlobalKey buttonKey = GlobalKey(debugLabel: "button_key");
   OverlayEntry? _overlayEntry;
   bool _isDropdownOpen = false;
   final TextEditingController _searchController = TextEditingController();
@@ -59,7 +59,7 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
   }
 
   void _openDropdown() {
-    RenderBox renderBox = _buttonKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox renderBox = buttonKey.currentContext!.findRenderObject() as RenderBox;
     Offset offset = renderBox.localToGlobal(Offset.zero);
     Size size = renderBox.size;
 
@@ -69,7 +69,6 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
         size: size, 
         onClose: _closeDropdown, 
         controller: _searchController, 
-        onSelectAll: (){}, 
         onChanged: widget.onChanged,
         options: widget.options,
         placeholder: widget.overlayPlaceholder,
@@ -103,8 +102,8 @@ class _StateStatusPickerState extends State<StateStatusPicker> {
       children: [
         SizedBox(
           width: widget.width,
-          child: GestureDetector(
-            key: _buttonKey,
+          child: InkWell(
+            key: buttonKey,
             onTap: _toggleDropdown,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
