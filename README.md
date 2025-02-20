@@ -8,7 +8,10 @@ Flutter widget that provides a dropdown for selecting statuses.
 - [Pub Package](https://pub.dev/packages/flutter_stage_status_picker)
 - [GitHub Repository](https://github.com/DarienRomero/flutter_stage_status_picker)
 
+![](https://github.com/DarienRomero/flutter_stage_status_picker/blob/master/.github/art/flutter_stage_status_picker.gif?raw=true)
+
 ## Installation
+
 
 Add this line to your `pubspec.yaml` file in the `dependencies` section:
 
