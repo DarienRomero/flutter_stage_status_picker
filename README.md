@@ -1,13 +1,12 @@
-# flutter_stage_status_picker
+# StageStatusPicker
 
-This package provides a customizable widget for selecting statuses in a Flutter user interface.
+Flutter widget that provides a dropdown for selecting statuses.
 
-## Features
+**Show some ❤️ and star the repo to support the project**
 
-- Status picker with customizable options.
-- Support for searching statuses in an overlay.
-- Ability to select multiple statuses.
-- Customizable colors and placeholder texts.
+### Resources:
+- [Pub Package](https://pub.dev/packages/flutter_stage_status_picker)
+- [GitHub Repository](https://github.com/DarienRomero/flutter_stage_status_picker)
 
 ## Installation
 
