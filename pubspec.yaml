@@ -1,7 +1,7 @@
 name: flutter_stage_status_picker
-description: "A new Flutter package project."
+description: "A Flutter widget that provides a dropdown for selecting statuses with customizable options."
 version: 1.0.0
-homepage:
+homepage: https://github.com/DarienRomero/flutter_stage_status_picker
 
 environment:
   sdk: ^3.5.3
